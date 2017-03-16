@@ -1,6 +1,6 @@
 # practice-vue
 
-> A Vue.js project
+> A musical instrument practice app built in Vue
 
 ## Build Setup
 
