@@ -32,9 +32,9 @@
                     </ul>
                 </li>
 
-                <button @click="addCurrent">Add!</button>
-
             </ul>
+
+            <button @click="addCurrent">Add!</button>
 
         </section>
 
