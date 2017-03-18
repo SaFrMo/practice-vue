@@ -41,14 +41,19 @@
             </ul>
 
             <button @click="addCurrent">Add!</button>
+            <button @click="reset">Reset</button>
 
         </section>
+
+        <practice-renderer :session="session"></practice-renderer>
 
     </div>
 
 </template>
 
 <script>
+
+    import PracticeRenderer from './practice-renderer.vue'
 
     export default {
         data(){
@@ -67,6 +72,9 @@
                 session: []
             }
         },
+        components: {
+            'practice-renderer': PracticeRenderer
+        },
         watch: {
             current: {
                 handler: function(val){
@@ -81,6 +89,9 @@
             addCurrent: function(){
                 this.current.id = Date.now()
                 this.session.push( this.current )
+                this.reset()
+            },
+            reset: function(){
                 this.current = {
                     task: '',
                     length: 1,
