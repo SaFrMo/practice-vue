@@ -19,7 +19,11 @@
 
             <ul v-if="current.task && current.task.length">
 
-                <li>...for <input type="number" min="1" v-model="current.time"> minute{{ current.time > 1 ? 's' : '' }}</li>
+                <li>...for
+                    <input type="number" min="1" v-model="current.length">
+                    {{ current.unit }}{{ current.length > 1 ? 's' : '' }}
+                    <button v-if="current.task == 'metronome'" @click="current.unit = otherUnit">Use {{ otherUnit }}s</button>
+                </li>
 
                 <li v-if="current.task == 'metronome'">...with measures:
                     <ul>
@@ -31,6 +35,8 @@
                         </li>
                     </ul>
                 </li>
+
+                <li>...labeled <input type="text" v-model="current.label"></li>
 
             </ul>
 
@@ -53,10 +59,22 @@
                 ],
                 current: {
                     task: '',
-                    time: 1,
-                    pattern: []
+                    length: 1,
+                    unit: 'minute',
+                    pattern: [],
+                    label: ''
                 },
                 session: []
+            }
+        },
+        watch: {
+            current: {
+                handler: function(val){
+                    if( this.current.task == 'timer' ){
+                        this.current.unit = 'minute'
+                    }
+                },
+                deep: true
             }
         },
         methods: {
@@ -65,9 +83,16 @@
                 this.session.push( this.current )
                 this.current = {
                     task: '',
-                    time: 1,
-                    pattern: []
+                    length: 1,
+                    unit: 'minute',
+                    pattern: [],
+                    label: ''
                 }
+            }
+        },
+        computed: {
+            otherUnit: function(){
+                return this.current.unit == 'minute' ? 'loop' : 'minute'
             }
         }
     }
