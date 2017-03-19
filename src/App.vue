@@ -4,9 +4,9 @@
         <h2>Practice!</h2>
 
         <ul>
-            <li v-for="(section, index) in session" :key="section.id">
+            <li v-for="(section, index) in session.plan" :key="section.id">
                 <h3>{{ section }}</h3>
-                <button @click="session.splice(index, 1)">X</button>
+                <button @click="session.plan.splice(index, 1)">X</button>
             </li>
         </ul>
 
@@ -17,7 +17,7 @@
                 <option v-for="task in tasks">{{ task }}</option>
             </select>
 
-            <ul v-if="current.task && current.task.length">
+            <ul v-if="editing">
 
                 <li>...for
                     <input type="number" min="1" v-model="current.length">
@@ -40,8 +40,10 @@
 
             </ul>
 
-            <button @click="addCurrent">Add!</button>
-            <button @click="reset">Reset</button>
+            <section v-if="editing">
+                <button @click="addCurrent">Add!</button>
+                <button @click="reset">Reset</button>
+            </section>
 
         </section>
 
@@ -69,7 +71,12 @@
                     pattern: [],
                     label: ''
                 },
-                session: []
+                session: {
+                    plan: [],
+                    current: {
+                        index: 0
+                    }
+                }
             }
         },
         components: {
@@ -78,6 +85,7 @@
         watch: {
             current: {
                 handler: function(val){
+                    // Validates timer - makes sure that timer is using minutes instead of loops as unit
                     if( this.current.task == 'timer' ){
                         this.current.unit = 'minute'
                     }
@@ -88,7 +96,7 @@
         methods: {
             addCurrent: function(){
                 this.current.id = Date.now()
-                this.session.push( this.current )
+                this.session.plan.push( this.current )
                 this.reset()
             },
             reset: function(){
@@ -104,6 +112,9 @@
         computed: {
             otherUnit: function(){
                 return this.current.unit == 'minute' ? 'loop' : 'minute'
+            },
+            editing: function(){
+                return this.current.task && this.current.task.length
             }
         }
     }
